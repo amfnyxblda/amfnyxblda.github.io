@@ -1,0 +1,78 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+/* import { GITHUB_URL } from '../../consts'; */
+import BlogPost from '../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => {
+    const [category, slug] = post.slug.split('/');
+    return {
+      params: { category, slug },
+      props: post,
+    };
+  });
+}
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { category } = Astro.params; // Get category from URL
+const { Content } = await post.render();
+---
+
+<BlogPost {...post.data} category={category}>
+  <Content />
+  <!-- <div class="contributions">
+  ⚠️ Play button may not work on certain browsers e.g. Brave ⚠️  <br/>
+  💡 Contributions Welcome!
+  We’d love your help to improve this project. 
+  Feel free to open an issue to report errors or suggest new ideas. 
+  Every contribution—big or small—makes a difference. 🙏</div> -->
+</CategoryPost>
+</BlogPost>
+<script>
+/* if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
+    console.log('Speech synthesis is supported');
+} else {
+    console.log('Speech synthesis is NOT supported');
+}  
+const spans = document.querySelectorAll('.listen');
+const synth = window.speechSynthesis;
+spans.forEach(span => {
+  // Create a button element
+  const playButton = document.createElement('button');
+  playButton.innerText = '▶';
+
+  // Set a data attribute on the button with the span's text content
+  playButton.setAttribute('data-value', span.innerHTML.trim());
+
+  // Optionally add a class to the button for styling
+  playButton.classList.add('play-button');
+
+  // Insert the button right after the span
+  span.insertAdjacentElement('afterend', playButton);
+
+  // Optional: Add an event listener for button functionality
+  playButton.addEventListener('click', () => {
+    const text = playButton.getAttribute('data-value');
+    console.log('Play button clicked for:', text);
+    const message = new SpeechSynthesisUtterance(text);
+
+    // Optional: Configure properties of the utterance
+    message.lang = "ko-KR"; // Set the language
+    message.volume = 1;    // Set the volume (0 to 1)
+    message.rate = 1;      // Set the speech rate (0.1 to 10)
+    message.pitch = 1;     // Set the pitch (0 to 2)
+
+    // Speak the utterance
+    speechSynthesis.speak(message);
+  });
+}); */
+</script>
+<style>
+.contributions{
+  margin: 40px auto 0;
+}
+
+</style>

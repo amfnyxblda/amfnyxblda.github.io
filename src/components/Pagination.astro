@@ -1,0 +1,181 @@
+---
+interface Props {
+  page: {
+    url: {
+      current: string;
+      prev?: string;
+      next?: string;
+    };
+    currentPage: number;
+    lastPage: number;
+  };
+}
+const { page } = Astro.props;
+
+// Helper function to generate page URLs
+const getPageUrl = (pageNumber: number) => {
+  const currentUrl = page.url.current;
+  
+  if (pageNumber === 1) {
+    // Check if it's a category page or the main index
+    if (currentUrl.startsWith('/category/')) {
+      const category = currentUrl.split('/')[2];
+      return `/category/${category}/`;
+    }
+    return '/'; // Main index first page
+  }
+
+  // Handle subsequent pages for both index and categories
+  if (currentUrl.startsWith('/category/')) {
+      const category = currentUrl.split('/')[2];
+      return `/category/${category}/${pageNumber}`;
+  }
+  return `/page/${pageNumber}`;
+};
+
+// --- Logic for generating numbered pagination with ellipses ---
+const siblingCount = 1; // How many numbers to show on each side of the current page
+const totalPageNumbers = siblingCount * 2 + 3; // current + siblings + first/last
+
+const pageNumbers: (number | '...')[] = [];
+
+if (page.lastPage <= totalPageNumbers + 2) { // If total pages is small, show all
+  for (let i = 1; i <= page.lastPage; i++) {
+    pageNumbers.push(i);
+  }
+} else {
+  const leftSiblingIndex = Math.max(page.currentPage - siblingCount, 1);
+  const rightSiblingIndex = Math.min(page.currentPage + siblingCount, page.lastPage);
+
+  const shouldShowLeftDots = leftSiblingIndex > 2;
+  const shouldShowRightDots = rightSiblingIndex < page.lastPage - 1;
+
+  // Always show the first page
+  pageNumbers.push(1);
+
+  // Show left ellipsis if needed
+  if (shouldShowLeftDots) {
+    pageNumbers.push('...');
+  }
+  
+  // Show page numbers around the current page
+  for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
+    if (i !== 1 && i !== page.lastPage) {
+        pageNumbers.push(i);
+    }
+  }
+
+  // Show right ellipsis if needed
+  if (shouldShowRightDots) {
+    pageNumbers.push('...');
+  }
+
+  // Always show the last page
+  pageNumbers.push(page.lastPage);
+}
+---
+
+{page.lastPage > 1 && (
+  <nav class="pagination-nav" aria-label="Pagination">
+    <!-- For small screens: "Page X of Y" -->
+    <div class="mobile-indicator">
+      Page {page.currentPage} of {page.lastPage}
+    </div>
+
+    <!-- Main pagination controls -->
+    <div class="pagination-controls">
+      <a href={page.url.prev} class:list={[{ disabled: !page.url.prev }]}>
+        &laquo; Prev
+      </a>
+
+      <ul class="page-numbers">
+        {pageNumbers.map(num => (
+          <li>
+            {num === '...' ? (
+              <span class="ellipsis">&hellip;</span>
+            ) : (
+              <a 
+                href={getPageUrl(num)} 
+                class:list={[{ active: num === page.currentPage }]}
+                aria-current={num === page.currentPage ? 'page' : false}
+              >
+                {num}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+      
+      <a href={page.url.next} class:list={[{ disabled: !page.url.next }]}>
+        Next &raquo;
+      </a>
+    </div>
+  </nav>
+)}
+
+<style>
+  .pagination-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    font-size: 1rem;
+  }
+  .pagination-controls {
+    display: none; /* Hide on mobile by default */
+  }
+  .mobile-indicator {
+    display: block; /* Show on mobile by default */
+    font-weight: bold;
+  }
+  .page-numbers {
+    list-style: none;
+    padding: 0;
+    margin: 0 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+  .page-numbers a,
+  .page-numbers span {
+    display: block;
+    min-width: 2.5em;
+    text-align: center;
+    padding: 0.5em;
+  }
+  a {
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  a:hover {
+    background-color: #f0f0f0;
+  }
+  a.active {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+    font-weight: bold;
+  }
+  a.disabled {
+    color: #aaa;
+    pointer-events: none;
+    border-color: #eee;
+  }
+  .ellipsis {
+    color: #aaa;
+  }
+
+  /* --- Responsive Styles --- */
+  @media (min-width: 640px) {
+    .pagination-controls {
+      display: flex; /* Show full controls on larger screens */
+      align-items: center;
+    }
+    .mobile-indicator {
+      display: none; /* Hide mobile indicator on larger screens */
+    }
+  }
+</style>

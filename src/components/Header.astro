@@ -1,0 +1,26 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+<header>
+    <div class="container">
+        <div id="logo">{SITE_TITLE}</div>
+        <p class="tagline">{SITE_DESCRIPTION}</p>
+    </div>
+</header>
+<style>
+  header {
+    margin: 0 0 30px;
+    padding: 0;
+    background: white;
+    text-align:center;
+  }
+  #logo{
+    font-size: 42px;
+    font-weight: 500;
+  }
+  .tagline {
+    margin-top: -5px;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+</style>

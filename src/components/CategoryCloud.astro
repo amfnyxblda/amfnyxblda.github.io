@@ -1,0 +1,51 @@
+---
+import { formatCategory } from '../lib/utils';
+interface Props {
+  categories: string[];
+  activeCategory?: string; // Can be a category name or 'all'
+}
+const { categories, activeCategory } = Astro.props;
+---
+
+<div class="category-cloud">
+
+  <a href="/" class:list={[{ active: activeCategory === 'all' }]}>All</a>
+  {categories.map(category => (
+
+      <a 
+        href={`/category/${category}/`} 
+        class:list={[{ active: category === activeCategory }]}>
+        {formatCategory(category)}
+      </a>
+  ))}
+</div>
+
+<style>
+  .category-cloud {
+    text-align: center;
+    margin: 0 0 1rem;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+  }
+  a {
+    display: inline-block;
+    background: #f4f4f4;
+    color: #333;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    font-size: 1em;
+    min-width: 3em;
+    transition: background-color 0.2s, color 0.2s;
+    border: 1px solid transparent;
+  }
+  a:hover {
+    background-color: #e0e0e0;
+  }
+  a.active {
+    background-color: #333;
+    color: white;
+    font-weight: bold;
+  }
+</style>

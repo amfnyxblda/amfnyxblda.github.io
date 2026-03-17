@@ -1,0 +1,98 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { formatCategory } from '../lib/utils';
+import JSONLD from "../components/JSONLD.astro";
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+// Get the category from the URL parameters. Astro makes this easy!
+const { category } = Astro.params;
+const categoryTitle = formatCategory(category);
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "datePublished": pubDate.toISOString(),
+  "image": heroImage ? new URL(heroImage, Astro.site).toString() : undefined,
+};
+---
+<JSONLD schema={articleSchema} slot="head" />
+<BaseLayout title={title} description={description}>
+	<article>
+		<h1>{title}</h1>
+		<div class="hero-image">
+			{heroImage && <img width={1024} height={683} src={heroImage} alt="" />}
+		</div>
+		<div class="prose">
+			<div class="title">
+				<div class="date">
+					<a href={`/category/${category}/`} class="category-tag">
+						{categoryTitle}
+					</a>
+					First published <FormattedDate date={pubDate} />
+					{updatedDate && <span class="last-updated-on">Updated <FormattedDate date={updatedDate} /></span>}
+				</div>
+        
+				{/* --- NEW CATEGORY TAG --- */}
+				<div class="category-container">
+				
+				</div>
+        {/* ----------------------- */}
+        
+				
+				<!-- <hr /> -->
+			</div>
+      <!-- <p>{description}</p> -->
+			<slot /> <!-- This is where your Markdown content goes -->
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	/* ... (existing styles) ... */
+	h1{
+		font-weight: 700;
+		margin-bottom: 50px;
+	}
+
+	.prose {
+		width: 720px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 1em;
+		color: rgb(var(--gray-dark));
+	}
+
+  /* --- NEW STYLES FOR THE TAG --- */
+  .category-container {
+    margin-bottom: 1rem;
+  }
+  .category-tag {
+    display: inline-block;
+    color: #eef2ff;
+    background-color: #4338ca;
+    padding: 0.2rem 0.6rem;
+    min-width: 30px;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-right: 30px;
+  }
+
+  .last-updated-on {
+		padding-left: 20px;
+		font-style: italic;
+	}
+	img {
+  max-width: 100%; /* Image will not exceed its container's width */
+  height: auto;    /* Height adjusts automatically to maintain aspect ratio */
+}
+</style>

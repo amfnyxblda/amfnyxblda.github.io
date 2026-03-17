@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import Pagination from '../components/Pagination.astro';
+import JSONLD from '../components/JSONLD.astro';
+import CategoryCloud from '../components/CategoryCloud.astro';
+
+const pageSize = 5;
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const allCategories = allPosts.map(post => post.slug.split('/')[0]);
+const uniqueCategories = [...new Set(allCategories)];
+
+const pageNum = 1;
+const totalPages = Math.ceil(allPosts.length / pageSize);
+const paginatedPosts = allPosts.slice(0, pageSize);
+
+const page = {
+  url: {
+    current: '/',
+    prev: undefined,
+    next: totalPages > 1 ? `/page/2` : undefined,
+  },
+  currentPage: 1,
+  lastPage: totalPages,
+};
+
+const Schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "My Blog Listing",
+  "description": "All articles and insights.",
+  "url": Astro.url.href
+}
+---
+<BaseLayout title="My Astro Blog" description="A blog about development and design">
+  <JSONLD schema={Schema} slot="head" />
+  <main>    
+    <!-- <CategoryCloud categories={uniqueCategories} activeCategory="all" /> -->
+
+    <PostList posts={paginatedPosts} />
+    <Pagination page={page} />
+  </main>
+</BaseLayout>
