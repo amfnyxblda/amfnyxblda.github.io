@@ -1,7 +1,7 @@
 ---
 title: 'Laser pointer games - is it safe or stressful for cats?'
 description: 'Cats love chasing laser dots, but experts warn of stress risks. Learn safe play tips to keep your cat healthy.'
-author: 'Anony'
+author: 'Anonymous'
 pubDate: '2025-01-17'
 updatedDate: '2025-01-17'
 heroImage: 'https://jagapet.com/images1/2.jpg'
