@@ -7,70 +7,76 @@ updatedDate: '2025-01-16'
 heroImage: 'https://jagapet.com/images1/1.jpg'
 ---
 
-You want to share a bite from your plate with your cat. You pause. Some human foods help your cat. Others cause real harm. Cats need meat first. You treat them right and keep portions small. This guide lists safe options and dangers. You stick to treats under 10 percent of daily calories. Your cat stays healthy.
+Last weekend I sat on the kitchen floor in our tiny HDB flat, chopping ginger for Sunday’s chicken rice, when Milo — that greedy tabby who thinks he owns the place — parked himself right between my knees. Eyes wide, tail flicking like he was conducting an orchestra. He knows the sound of the cleaver on the board means something good might drop. I gave him a tiny shred of plain steamed breast before I added the garlic and soy. He devoured it in one gulp and looked up like, “That’s it?” Classic Milo. That little moment reminded me how easy it is to share — and how quickly it can go wrong if I’m not careful.
 
-## Why you share human food
+Living in Singapore, food is everywhere. Hawker centres, wet markets, the auntie next door frying sambal prawns at 7 a.m. Cats smell it all. They beg with those big slow blinks, and our hearts melt. But cats aren’t little humans in fur coats. They’re obligate carnivores. Meat first, always. Most human stuff should stay human stuff. Still, a few things from our kitchens can be safe treats if you play by the rules. Here’s what I’ve learned after eight years of trial, error, and late-night vet Google searches.
 
-Cats stare at your dinner. You give in sometimes. Safe treats build your bond. They add variety without replacing cat food. You pick plain items. Cooked meat tops the list. Wrong choices send you to the vet fast. You control portions. One teaspoon often fills the treat slot for an average cat. You watch reactions every time.
+### Proteins They Actually Love (When Done Right)
 
-## Proteins you safely share
+Plain cooked chicken is the undisputed king. I boil a whole breast without salt, skin, or anything fancy, then shred it into fingernail-sized pieces. Milo goes crazy for it. Many of us already cook chicken for congee or Hainanese-style — just pull out a plain portion before the ginger-scallion sauce hits. Same goes for turkey if you can find it (not always easy here, but NTUC sometimes stocks it around Christmas). Lean beef works too — think sukiyaki cuts boiled plain. No marinade, no oyster sauce.
 
-You start with chicken. Boil it plain. Skip salt, spices, and bones. Cut it into tiny pieces. Your cat gets clean protein. It builds muscle and keeps energy steady. Turkey works the same way. You use skinless breast. Lean beef fits next. Cook it fully. Trim fat first. Lamb comes in small amounts only.
+Fish feels natural because so many Asian families eat it steamed or grilled. Salmon or mackerel, cooked through, bones and skin removed — a small cube once or twice a week adds omega-3s without overdoing it. I tried giving Milo a bit of my Teochew-style steamed pomfret once (sauce on the side, of course). He licked the plate clean. But too much fish long-term can mess with thiamine, so moderation is key. Never raw. No sashimi scraps from the conveyor-belt place. Bacteria risk is real.
 
-Fish adds healthy fats. You bake salmon. Remove every bone and skin. Tuna in water works too. You limit it to once a week. Mercury builds up fast. Eggs deliver vitamins. Scramble or boil them. Never feed raw eggs. Your cat absorbs protein and biotin without stomach upset. These proteins mimic what cats hunt in the wild.
+Eggs? Yes. Scrambled or hard-boiled, no oil, no salt. I sometimes make an extra plain one during breakfast rush. A teaspoon mixed into his kibble feels like a luxury upgrade.
 
-You measure carefully. A cat that weighs ten pounds gets one teaspoon total treat per day. You mix it with regular food. Your cat begs less and stays satisfied.
+The golden rule: everything plain, fully cooked, no bones. Bones splinter. Seasonings hide danger. Garlic and onion lurk in almost every stir-fry, curry, or nasi lemak paste. More on that nightmare later.
 
-## Vegetables that help your cat
+### A Few Vegetables (Yes, Really — Sometimes)
 
-Pumpkin supports digestion. You cook it plain or use canned without sugar. A small spoonful eases constipation. Carrots add fiber. Steam them soft. Your cat chews them easy. Broccoli and green beans follow the same rule. You chop them fine. These veggies fill your cat without extra calories.
+Most cats ignore plants, but a couple can help. Steamed pumpkin — the kind we put in porridge — pureed plain is magic for tummy issues. Loose stool? A bit firms things up. Constipation? It softens. I keep a small tub in the fridge from when I make buah keluak soup (minus the spice, obviously).
 
-Cats eat little plant matter naturally. You offer these in tiny bits. They provide vitamins your cat misses sometimes. You steam or boil everything. Raw pieces choke cats or pass undigested. You introduce one vegetable at a time. Watch for loose stool. Most cats ignore veggies. That is normal. You do not force them.
+Carrots or peas, steamed soft and chopped tiny, add fibre. Broccoli too. Not every cat cares — Milo sniffs and walks away half the time — but when he does nibble, I feel like I’m doing something wholesome.
 
-## Fruits you offer in tiny amounts
+### Fruits in Tiny Doses
 
-Apples give fiber and vitamins. You peel them. Remove seeds and core. Cut a small slice. Bananas supply potassium. Mash a pea-size piece. Blueberries fight free radicals. You give two or three. Strawberries and cantaloupe work too. Remove rinds and seeds.
+Fruit is trickier because of sugar. Watermelon (no rind, no seeds) is mostly water and refreshing on humid days. A few blueberries or a thin strawberry slice once a week won’t hurt. Banana mash — literally a quarter teaspoon — is okay occasionally. I tried offering Milo a piece of pear during Mid-Autumn. He batted it across the floor like a toy. Fair enough.
 
-Fruits contain sugar. Cats handle little. You limit fruit to once a week max. These snacks add antioxidants. They keep your cat interested in new flavors. You wipe mouths after. Sticky fruit sticks to fur. Your cat grooms clean anyway.
+Portions stay ridiculously small. Treats should never exceed ten percent of daily calories. A four-kilo cat doesn’t need much.
 
-## Dairy you give with caution
+### Grains? Only If You Must
 
-Some cats tolerate cottage cheese. You pick low-fat plain. A tiny dab works. Unsweetened yogurt fits the same. Many cats lack lactose enzymes. You watch for diarrhea or gas. Skip milk entirely. It upsets most stomachs. These dairy bits add calcium. You use them rarely. Your cat gets enough from regular food.
+Plain white rice or brown rice — a teaspoon mixed with meat — bulks without harm. Cats in rice-eating households often lick stray grains anyway. Oats cooked plain work the same way. But grains aren’t their natural fuel. Think of them as occasional filler, not a meal.
 
-## Foods you must avoid
+### The Stuff That Can Actually Kill Them
 
-Onions, garlic, leeks, and chives destroy red blood cells. No amount works. Your cat develops anemia. Symptoms hit slow. You skip every allium family item.
+Here’s where my stomach twists. Onions and garlic. They’re in everything — sambal, curry rempah, bak chor mee gravy, even some mooncake fillings. These alliums wreck red blood cells. Cats get anemic fast. Weak, fast breathing, dark urine. I once panicked after Milo licked a spoon I’d used for garlic aioli. Nothing happened (tiny amount, quick vomit), but the guilt lasted weeks. Chives, leeks, shallots — same family. Powdered forms concentrate the toxin. Skip every dish with them.
 
-Chocolate poisons cats fast. Theobromine attacks the heart. Dark chocolate harms most. You keep it locked away.
+Chocolate. Theobromine poisoning. Vomiting, racing heart, seizures. Festival seasons are dangerous — chocolate-dipped strawberries, Kinder surprises, even some ang pow chocolates. Keep it locked.
 
-Grapes and raisins shut down kidneys. One or two trigger failure. Your cat vomits then stops eating. Kidney damage follows.
+Grapes and raisins wreck kidneys. Some cats show no signs until urine output stops. Raisins hide in festive cookies or trail mix.
 
-Alcohol slows the brain. Even a drop causes trouble. Caffeine in coffee or tea does the same. Your cat trembles and races its heart.
+Dairy. Most adult cats in Asia (like most humans here) lose lactase. Milk, condensed milk in kopi, cheese — diarrhea city. Milo tried licking my teh tarik foam once. Regretted it immediately.
 
-Raw meat, eggs, or fish carry bacteria. Salmonella or parasites invade. You cook everything.
+Fatty or salty foods trigger pancreatitis. Bak kwa during CNY? High salt, sugar, preservatives. Spring rolls, crispy duck skin, satay marinade — all risky. Cooked bones splinter and block intestines.
 
-Bones splinter inside. They block or cut the gut. Fat trimmings inflame the pancreas. Vomiting and pain follow.
+Raw anything — meat, fish, eggs — carries salmonella or parasites. No raw tuna poke bowl scraps.
 
-Avocado upsets some cats. You avoid it. Nuts choke or cause blockages. Xylitol in gum or candy drops blood sugar. Your cat collapses.
+Alcohol. Even a lick of beer or cooking wine can depress the nervous system.
 
-Processed meats pack salt and preservatives. They strain kidneys. You never share bacon or sausage. Yeast dough rises in the stomach. It causes bloat and alcohol poisoning.
+Xylitol in gum or low-sugar sweets drops blood sugar dangerously.
 
-You store these items out of reach. Your cat knocks things down. You stay alert.
+Spicy chili? Cats usually avoid it, but accidental sambal lick causes pain and vomiting.
 
-## How you feed safely
+### Everyday Asian Meals — What’s Safe?
 
-You introduce new foods slow. Start with one pea-size piece. Wait two days. Watch for vomiting or diarrhea. You chop every treat small. Your cat swallows whole. Cooked items cool fully. You wipe hands after prep. No cross contamination.
+Chicken rice: plain steamed chicken and a few grains of rice — yes. Chili, garlic oil, dark soy — no.
 
-Portions stay tiny. You weigh your cat. Adjust treats down if weight rises. Treats never replace meals. Your cat needs balanced cat food daily. You consult your vet first. Health conditions change rules. Senior cats or sick ones need extra care.
+Steamed fish: plain version only. No superior stock or soy drizzle.
 
-You rotate safe foods. Chicken one day. Pumpkin the next. Your cat avoids boredom. You wash bowls after treats. Fresh water stays nearby.
+Congee: plain rice porridge with shredded chicken — gentle on the stomach.
 
-## Signs you watch
+Curries, rendang, laksa: garlic and onion base. Hard pass.
 
-Your cat acts off after a treat. You note vomiting, lethargy, or breathing changes. You call the vet right away. Poison control lines help too. You keep numbers handy.
+Sushi: raw risk. Cooked bento items might work if plain.
 
-## You keep your cat safe long term
+Festival time amps the danger. CNY yu sheng has raw fish and sauces. Bak kwa is salty-sweet death. Hari Raya ketupat comes with rendang. Deepavali sweets might hide raisins or chocolate. I double-check bins and counters those weeks.
 
-You control the bowl. Safe proteins and veggies add joy. You skip dangers completely. Your cat lives longer and stronger. You enjoy quiet moments together. Share smart. Your cat thanks you with purrs and head bumps.
+### Watching for Trouble
 
-You now spot safe bites fast. You cook plain. You cut small. You watch close. This approach works every time. Your cat stays happy and healthy for years.
+If something goes wrong — vomiting, diarrhea, lethargy, pale gums, no pee — vet now. In Singapore, most clinics handle emergencies fast. AVS helpline exists too. Better safe.
+
+I’m not perfect. I’ve slipped up. Milo’s fine because I caught mistakes early and treats stay rare. He gets 90%+ proper kibble/wet food. The rest is love in tiny, safe bites.
+
+Sharing food feels like love. That’s why we do it. But real love means knowing when to say no. Milo still stares at my plate every meal. I still give him the occasional plain chicken shred. He still looks mildly offended that it isn’t more.
+
+And honestly? That’s kind of perfect.

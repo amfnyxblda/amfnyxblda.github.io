@@ -54,12 +54,22 @@ const articleSchema = {
 </BaseLayout>
 
 <style>
-	/* ... (existing styles) ... */
-	h1{
-		font-weight: 700;
-		margin-bottom: 50px;
-	}
+h1 {
+  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif; /* Or any elegant serif */
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -0.011em;
+  line-height: 52px;
+  margin-bottom: 1em;
+}
 
+article {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.6;
+  color: #292929;
+}
 	.prose {
 		width: 720px;
 		max-width: calc(100% - 2em);
@@ -91,8 +101,19 @@ const articleSchema = {
 		padding-left: 20px;
 		font-style: italic;
 	}
-	img {
-  max-width: 100%; /* Image will not exceed its container's width */
-  height: auto;    /* Height adjusts automatically to maintain aspect ratio */
+
+/* Images and Figures */
+figure {
+  margin: 44px -100px; /* Pulls image wider than text column */
+  text-align: center;
+}
+
+@media (max-width: 880px) {
+  figure { margin: 44px 0; }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 </style>
