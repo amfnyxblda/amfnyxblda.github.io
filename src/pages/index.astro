@@ -1,48 +1,338 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostList from '../components/PostList.astro';
-import Pagination from '../components/Pagination.astro';
-import JSONLD from '../components/JSONLD.astro';
-import CategoryCloud from '../components/CategoryCloud.astro';
+import Hero from "../components/Hero.astro";
+import Pagination from "../components/Pagination.astro";
+import { canonicalizeCategorySlug, formatCategory } from "../lib/utils";
 
-const pageSize = 5;
+export const POSTS_PER_PAGE = 3;
 
 const allPosts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const allCategories = allPosts.map(post => post.slug.split('/')[0]);
-const uniqueCategories = [...new Set(allCategories)];
+const allCategories = allPosts.map((post) => canonicalizeCategorySlug(post.id.split('/')[0]));
+const categories = [...new Set(allCategories)];
 
-const pageNum = 1;
-const totalPages = Math.ceil(allPosts.length / pageSize);
-const paginatedPosts = allPosts.slice(0, pageSize);
-
-const page = {
-  url: {
-    current: '/',
-    prev: undefined,
-    next: totalPages > 1 ? `/page/2` : undefined,
-  },
-  currentPage: 1,
-  lastPage: totalPages,
+const postPath = (postId: string) => {
+  const [rawCategory, slug] = postId.split("/");
+  return `/${canonicalizeCategorySlug(rawCategory)}/${slug}`;
 };
+
+const sorted = allPosts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
+const currentPage = 1;
+const pagePosts = sorted.slice(0, POSTS_PER_PAGE);
 
 const Schema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "My Blog Listing",
-  "description": "All articles and insights.",
+  "name": "Jagapet",
+  "description": "Paw-sitive guides for taking care of your pet.",
   "url": Astro.url.href
 }
----
-<BaseLayout title="My Astro Blog" description="A blog about development and design">
-  <JSONLD schema={Schema} slot="head" />
-  <main>    
-    <!-- <CategoryCloud categories={uniqueCategories} activeCategory="all" /> -->
 
-    <PostList posts={paginatedPosts} />
-    <Pagination page={page} />
-  </main>
+function timeAgo(date: Date): string {
+  const diff = Date.now() - date.getTime();
+  const hours = Math.floor(diff / 3600000);
+  const days  = Math.floor(diff / 86400000);
+  if (hours < 1)  return "Just now";
+  if (hours < 24) return `${hours} hr${hours > 1 ? "s" : ""} ago`;
+  if (days < 7)   return `${days} day${days > 1 ? "s" : ""} ago`;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+---
+<BaseLayout
+  title="Jagapet"
+  description="Paw-sitive guides for taking care of your pet."
+>
+  <!-- ── Hero ──────────────────────────────── -->
+  <Hero />
+
+  <div class="blog-page">
+
+    <!-- ── Main layout: list + sidebar ──────────── -->
+    <div class="blog-layout">
+
+      <!-- Article list -->
+      <main class="blog-main" id="main-content">
+
+        <h3 id="latest-articles" class="latest-articles-anchor">Latest Articles</h3>
+
+        <!-- Article rows -->
+        <div class="article-list">
+          {pagePosts.map((post) => {
+            const category = canonicalizeCategorySlug(post.id.split('/')[0]);
+            const ago     = timeAgo(post.data.pubDate);
+            return (
+              <article class="article-row">
+                <!-- Category label (vertical, left) -->
+                <a href={`/${category}`} class="article-row__cat" aria-label={`Category: ${post.data.category}`}>
+                  <span>{formatCategory(category).toUpperCase()}</span>
+                </a>
+
+                <!-- Thumbnail -->
+                {post.data.heroImage && (
+                  <a href={postPath(post.id)} class="article-row__thumb-wrap" tabindex="-1" aria-hidden="true">
+                    <img
+                      src={post.data.heroImage}
+                      alt={post.data.title}
+                      class="article-row__thumb"
+                      loading="lazy"
+                      decoding="async"
+                      width="320"
+                      height="200"
+                    />
+                    {post.data.featured && (
+                      <span class="article-row__featured-badge">Featured</span>
+                    )}
+                  </a>
+                )}
+
+                <!-- Text -->
+                <div class="article-row__body">
+                  <div class="article-row__header"><span class="article-row__time">{ago}</span>
+                  {post.data.readingTime && (
+                      <>
+                        <span class="article-row__meta-dot">&#x2022;</span>
+                        <span class="article-row__read-time">{post.data.readingTime} min</span>
+                      </>
+                    )}
+                  </div>
+                  
+                  <h2 class="article-row__title">
+                    <a href={postPath(post.id)} class="article-row__title-link">
+                      {post.data.title}
+                    </a>
+                  </h2>
+                  <p class="article-row__desc">{post.data.description}</p>
+
+                  <!-- Reactions / meta row -->
+                  <div class="article-row__meta">
+                    {/* <div class="article-row__reactions">
+                      <span class="reaction">&#x1F525;</span>
+                      <span class="reaction">&#x1F914;</span>
+                      <span class="reaction-count">{Math.floor(Math.random() * 40) + 4}</span>
+                    </div>
+                    <span class="article-row__meta-dot">&#x2022;</span>
+                    <a href={postPath(post.id)} class="article-row__comments">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                      </svg>
+                      {Math.floor(Math.random() * 30) + 2}
+                    </a> */}
+                    
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/page" />
+      </main>
+
+      <!-- Sidebar -->
+      <aside class="blog-sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-heading">Categories</h3>
+          <ul class="sidebar-cats">
+            {categories.map((cat) => {
+              const count = allPosts.filter((p) => canonicalizeCategorySlug(p.id.split('/')[0]) === cat).length;
+              return (
+                <li>
+                  <a href={`/${cat}`} class="sidebar-cat">
+                    <span class="sidebar-cat__name">{formatCategory(cat)}</span>
+                    {/* <span class="sidebar-cat__count">{count}</span> */}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+       <!--  <div class="sidebar-section">
+          <h3 class="sidebar-heading">Featured</h3>
+          {allPosts.filter((p) => p.data.featured).slice(0, 4).map((post) => (
+            <a href={postPath(post.id)} class="sidebar-featured">
+              {post.data.heroImage && (
+                <img src={post.data.heroImage} alt="" class="sidebar-featured__img" width="60" height="60" loading="lazy" />
+              )}
+              <span class="sidebar-featured__title">{post.data.title}</span>
+            </a>
+          ))}
+        </div> -->
+
+        <div class="sidebar-section">
+          <a href="/search" class="sidebar-search-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Search articles
+          </a>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+  
+
+  <!-- ── Newsletter / CTA Banner ────────────── -->
+  <!-- <section class="cta-banner">
+    <div class="container cta-banner__inner">
+      <div class="cta-banner__text">
+        <h2 class="cta-banner__title">Stay in the loop</h2>
+        <p class="cta-banner__subtitle">
+          New essays and stories, straight to your inbox. No noise, no ads. Just good writing.
+        </p>
+      </div>
+      <div class="cta-banner__form">
+        <div class="newsletter-field">
+          <input
+            type="email"
+            placeholder="your@email.com"
+            class="newsletter-input"
+            aria-label="Email address"
+          />
+          <button class="btn btn--primary newsletter-btn" type="button">
+            Subscribe
+          </button>
+        </div>
+        <p class="newsletter-note">Unsubscribe anytime. No spam, ever.</p>
+      </div>
+    </div>
+  </section> -->
 </BaseLayout>
+
+<style>
+/* ── Section layout ──────────────────────────── */
+.section {
+  padding: var(--space-3xl) 0;
+}
+
+.section--sm {
+  padding: var(--space-2xl) 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.section-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-right: auto;
+}
+
+.section-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  order: -1;
+  width: 100%;
+  margin-bottom: -0.5rem;
+}
+
+.section-more {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  margin-left: auto;
+  transition: color var(--transition);
+}
+
+.section-more:hover { color: var(--color-ink); }
+
+
+/* ── CTA / Newsletter banner ─────────────────── */
+.cta-banner {
+  background: var(--color-ink);
+  padding: var(--space-3xl) 0;
+  margin-top: var(--space-3xl);
+}
+
+.cta-banner__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.cta-banner__title {
+  font-size: 2rem;
+  color: white;
+  margin-bottom: var(--space-sm);
+}
+
+.cta-banner__subtitle {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.newsletter-field {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.07);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.newsletter-input::placeholder { color: rgba(255,255,255,0.3); }
+.newsletter-input:focus { border-color: rgba(255,255,255,0.4); }
+
+.newsletter-btn {
+  white-space: nowrap;
+  background: var(--color-accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+}
+
+.newsletter-btn:hover { background: var(--color-accent-2); }
+
+.newsletter-note {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.3);
+  margin: 0;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+  .cta-banner__inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .newsletter-field { flex-direction: column; }
+}
+
+.latest-articles-anchor {
+  scroll-margin-top: 110px;
+}
+</style>
+
+
+

@@ -1,77 +1,427 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 /* import { GITHUB_URL } from '../../consts'; */
-import BlogPost from '../../layouts/BlogPost.astro';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { canonicalizeCategorySlug, formatCategory } from "../../lib/utils";
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => {
-    const [category, slug] = post.slug.split('/');
+    const [rawCategory, slug] = post.id.split('/');
+    const category = canonicalizeCategorySlug(rawCategory);
+
     return {
       params: { category, slug },
       props: post,
     };
   });
 }
-type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { category } = Astro.params; // Get category from URL
-const { Content } = await post.render();
+const { category, slug } = Astro.params; // Get category from URL
+const { Content } = await render(post);
+const categoryLabel = formatCategory(category);
+
+// 1. Fetch Related Posts
+const allPosts = await getCollection('blog');
+const related = allPosts
+  .filter((p) => {
+    const [pCategory, pSlug] = p.id.split('/');
+    
+    // Condition: Same category AND NOT the current slug
+    return canonicalizeCategorySlug(pCategory) === category && pSlug !== slug;
+  })
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((p) => {
+    const [pCategory, pSlug] = p.id.split('/');
+    return {
+      ...p,
+      category: canonicalizeCategorySlug(pCategory),
+      slug: `${canonicalizeCategorySlug(pCategory)}/${pSlug}`,
+    };
+  })
+  .slice(0, 3); // Limit to top 3 recommendations
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags,
+  author,
+  readingTime,
+} = post.data;
+
+const formattedDate = pubDate.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const updatedFormatted = updatedDate
+  ? updatedDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+  : null;
 ---
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={heroImage}
+  article={true}
+>
 
-<BlogPost {...post.data} category={category}>
-  <Content />
-  <!-- <div class="contributions">
-  ⚠️ Play button may not work on certain browsers e.g. Brave ⚠️  <br/>
-  💡 Contributions Welcome!
-  We’d love your help to improve this project. 
-  Feel free to open an issue to report errors or suggest new ideas. 
-  Every contribution—big or small—makes a difference. 🙏</div> -->
-</CategoryPost>
-</BlogPost>
-<script>
-/* if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
-    console.log('Speech synthesis is supported');
-} else {
-    console.log('Speech synthesis is NOT supported');
-}  
-const spans = document.querySelectorAll('.listen');
-const synth = window.speechSynthesis;
-spans.forEach(span => {
-  // Create a button element
-  const playButton = document.createElement('button');
-  playButton.innerText = '▶';
+  <div class="post-hero-split">
+    {heroImage && (
+      <div class="post-hero-split__media container">
+        <img
+          src={heroImage}
+          alt={title}
+          class="post-hero-split__image"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    )}
 
-  // Set a data attribute on the button with the span's text content
-  playButton.setAttribute('data-value', span.innerHTML.trim());
+    <div class="post-hero-split__content container--narrow">
+      <div class="post-hero-split__meta">
+        <a href={`/${category}`} class="tag tag--accent">{categoryLabel}</a>
+        <span class="post-hero-split__dot" aria-hidden="true">·</span>
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        {readingTime && (
+          <>
+            <span class="post-hero-split__dot" aria-hidden="true">·</span>
+            <span>{readingTime} min read</span>
+          </>
+        )}
+      </div>
 
-  // Optionally add a class to the button for styling
-  playButton.classList.add('play-button');
+      <h1 class="post-hero-split__title">{title}</h1>
+      <p class="post-hero-split__desc">{description}</p>
 
-  // Insert the button right after the span
-  span.insertAdjacentElement('afterend', playButton);
+      <div class="post-hero-split__author">
+        <div class="author-avatar" aria-hidden="true">
+          {author.charAt(0)}
+        </div>
+        <div>
+          <span class="author-name author-name--dark">{author}</span>
+          {updatedFormatted && (
+            <span class="post-hero-split__updated">Updated {updatedFormatted}</span>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
 
-  // Optional: Add an event listener for button functionality
-  playButton.addEventListener('click', () => {
-    const text = playButton.getAttribute('data-value');
-    console.log('Play button clicked for:', text);
-    const message = new SpeechSynthesisUtterance(text);
+  <!-- Article body -->
+  <div class="post-body container--narrow">
+    <div class="post-content prose" data-pagefind-body>
+      <Content />
+    </div>
 
-    // Optional: Configure properties of the utterance
-    message.lang = "ko-KR"; // Set the language
-    message.volume = 1;    // Set the volume (0 to 1)
-    message.rate = 1;      // Set the speech rate (0.1 to 10)
-    message.pitch = 1;     // Set the pitch (0 to 2)
+    <!-- Tags -->
+    <!-- {tags.length > 0 && (
+      <div class="post-tags">
+        <span class="post-tags__label">Tagged:</span>
+        {tags.map((tag) => (
+          <a href={`/search/?q=${encodeURIComponent(tag)}`} class="tag">{tag.toLowerCase()}</a>
+        ))}
+      </div>
+    )}
+ -->
+    <!-- Share / nav row -->
+    <div class="post-nav">
+      <a href="/" class="post-nav__back">← All articles</a>
+      <a href={`/${category}`} class="post-nav__category">
+        More in {categoryLabel} →
+      </a>
+    </div>
+  </div>
 
-    // Speak the utterance
-    speechSynthesis.speak(message);
-  });
-}); */
-</script>
+  <!-- Related posts -->
+  {related.length > 0 && (
+    <section class="related-section">
+      <div class="container">
+        <h2 class="related-title">More in {categoryLabel}</h2>
+        <div class="related-grid">
+          {related.map((rel) => (
+            <PostCard
+              title={rel.data.title}
+              description={rel.data.description}
+              pubDate={rel.data.pubDate}
+              category={rel.category}
+              author={rel.data.author}
+              slug={rel.slug}
+              heroImage={rel.data.heroImage}
+              readingTime={rel.data.readingTime}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
 <style>
-.contributions{
-  margin: 40px auto 0;
+/* Split hero alternative (image and content separated) */
+.post-hero-split {
+  padding-top: calc(var(--nav-height) + var(--space-lg));
+  margin-bottom: var(--space-xl);
 }
 
+.post-hero-split__media {
+  margin-bottom: var(--space-xl);
+}
+
+.post-hero-split__image {
+  width: 100%;
+  height: min(62vh, 680px);
+  object-fit: contain;
+  object-position: center;
+  background: var(--color-surface);
+}
+
+.post-hero-split__content {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+}
+
+.post-hero-split__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-ink-3);
+  margin-bottom: var(--space-lg);
+}
+
+.post-hero-split__dot { opacity: 0.5; }
+
+.post-hero-split__title {
+  font-size: clamp(1.8rem, 5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+  max-width: 760px;
+  margin-bottom: var(--space-md);
+}
+
+.post-hero-split__desc {
+  font-size: 1.05rem;
+  color: var(--color-ink-2);
+  max-width: 680px;
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
+}
+
+.post-hero-split__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.author-name--dark {
+  color: var(--color-ink);
+}
+
+.post-hero-split__updated {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-ink-4);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+@media (max-width: 760px) {
+  .post-hero-split__content {
+    padding: var(--space-lg);
+  }
+
+  .post-hero-split__desc {
+    font-size: 1rem;
+  }
+}
+
+/* ── Post hero ───────────────────────────────── */
+.post-hero {
+  position: relative;
+  background: var(--color-ink);
+  color: white;
+  min-height: 480px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  padding-top: 80px;
+}
+
+.post-hero__image-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.post-hero__image {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: var(--color-ink);
+}
+
+.post-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15,14,12,0.92) 0%,
+    rgba(15,14,12,0.60) 50%,
+    rgba(15,14,12,0.35) 100%
+  );
+}
+
+.post-hero__content {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-2xl);
+}
+
+.post-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: var(--space-lg);
+}
+
+.post-hero__dot { opacity: 0.4; }
+
+.post-hero__title {
+  font-size: clamp(1.8rem, 5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: white;
+  max-width: 760px;
+  margin-bottom: var(--space-md);
+}
+
+.post-hero__desc {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.65);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
+  font-style: italic;
+}
+
+.post-hero__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.author-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.author-name {
+  display: block;
+  font-weight: 500;
+  color: var(--color-ink);
+  font-size: 0.95rem;
+}
+
+.post-hero__updated {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+/* ── Post body ───────────────────────────────── */
+.post-body {
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-2xl);
+}
+
+/* ── Tags ────────────────────────────────────── */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.post-tags__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-4);
+}
+
+/* ── Post nav ────────────────────────────────── */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  gap: var(--space-md);
+}
+
+.post-nav__back,
+.post-nav__category {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  transition: color var(--transition);
+}
+
+.post-nav__back:hover,
+.post-nav__category:hover { color: var(--color-ink); }
+
+/* ── Related posts ───────────────────────────── */
+.related-section {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-2xl) 0 var(--space-3xl);
+}
+
+.related-title {
+  font-size: 1.4rem;
+  margin-bottom: var(--space-xl);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
 </style>

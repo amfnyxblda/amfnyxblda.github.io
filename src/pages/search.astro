@@ -1,0 +1,216 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { canonicalizeCategorySlug, formatCategory } from "../lib/utils";
+
+const posts = await getCollection("blog");
+const categories = [...new Set(posts.map((post) => canonicalizeCategorySlug(post.id.split("/")[0])))].sort();
+---
+
+<BaseLayout
+  title="Search"
+  description="Search all articles on Meridian - find essays on technology, exercise & fitness, food, travel, environment, and health."
+>
+  <div class="search-header">
+    <div class="container">
+      <span class="page-kicker">Find anything</span>
+      <h1 class="page-title">Search</h1>
+      <p class="page-desc">
+        Full-text search across all Meridian articles and essays.
+      </p>
+    </div>
+  </div>
+
+  <div class="container search-body">
+    <div id="search" class="search-widget"></div>
+
+    <div class="search-tips">
+      <h2 class="tips-title">Browse by category</h2>
+      <div class="tips-grid">
+        {categories.map((category) => (
+          <a href={`/${category}`} class="tip-card">
+            <span class="tip-card__label">{formatCategory(category)}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+<script src="/pagefind/pagefind-ui.js" is:inline></script>
+
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    if (typeof PagefindUI !== "undefined") {
+      new PagefindUI({
+        element: "#search",
+        showSubResults: true,
+        showImages: true,
+        resetStyles: false,
+      });
+
+      const initialQuery = new URLSearchParams(window.location.search).get("q")?.trim();
+      if (initialQuery) {
+        const applyInitialQuery = () => {
+          const input = document.querySelector("#search .pagefind-ui__search-input");
+          if (!input) return false;
+          input.value = initialQuery;
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          return true;
+        };
+
+        if (!applyInitialQuery()) {
+          let attempts = 0;
+          const timer = window.setInterval(() => {
+            attempts += 1;
+            if (applyInitialQuery() || attempts > 20) {
+              window.clearInterval(timer);
+            }
+          }, 100);
+        }
+      }
+    }
+  });
+</script>
+
+<style>
+.search-header {
+  padding-top: calc(80px + 1.5rem);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-2xl) 0 var(--space-xl);
+}
+
+.page-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.page-desc {
+  color: var(--color-ink-3);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.search-body {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-3xl);
+  max-width: 860px;
+}
+
+.search-widget {
+  margin-bottom: var(--space-3xl);
+}
+
+:global(.pagefind-ui__search-input) {
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  border-color: var(--color-border) !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--color-surface) !important;
+  color: var(--color-ink) !important;
+  padding: 0.8rem 4rem 0.8rem 1rem !important;
+}
+
+:global(.pagefind-ui__form:before) {
+  left: auto !important;
+  right: 1rem !important;
+}
+
+:global(.pagefind-ui__search-clear) {
+  right: 2.4rem !important;
+}
+
+:global(.pagefind-ui__search-input:focus) {
+  border-color: var(--color-accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(200, 83, 58, 0.12) !important;
+}
+
+:global(.pagefind-ui__search-clear) {
+  color: var(--color-ink-3) !important;
+}
+
+:global(.pagefind-ui__result-title) {
+  font-family: var(--font-display) !important;
+  color: var(--color-ink) !important;
+}
+
+:global(.pagefind-ui__result-link) {
+  color: var(--color-accent) !important;
+}
+
+:global(.pagefind-ui__result-excerpt) {
+  font-family: var(--font-body) !important;
+  color: var(--color-ink-3) !important;
+  font-size: 0.9rem !important;
+}
+
+:global(.pagefind-ui__button) {
+  background: var(--color-ink) !important;
+  color: white !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.06em !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+:global(.pagefind-ui__button:hover) {
+  background: var(--color-accent) !important;
+}
+
+.tips-title {
+  font-size: 1.2rem;
+  margin-bottom: var(--space-lg);
+  color: var(--color-ink-2);
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-md);
+}
+
+.tip-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all var(--transition);
+}
+
+.tip-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.tip-card__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+}
+</style>

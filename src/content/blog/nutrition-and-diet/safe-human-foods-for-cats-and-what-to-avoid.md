@@ -1,10 +1,11 @@
 ---
-title: 'Safe Human Foods for Cats (and What to Avoid)'
-description: 'A comprehensive guide to safe and toxic human foods for cats, featuring 2026 feline nutrition trends and expert advice.'
-author: 'Anonymous'
-pubDate: '2025-01-16'
-updatedDate: '2025-01-16'
-heroImage: 'https://jagapet.com/images1/1.jpg'
+title: "Safe Human Foods for Cats (and What to Avoid)e"
+description: "A comprehensive guide to safe and toxic human foods for cats, featuring 2026 feline nutrition trends and expert advice."
+pubDate: "2025-04-16"
+author: "Anonymous"
+featured: false
+readingTime: 5
+heroImage: "https://jagapet.com/images1/1.jpg"
 ---
 
 Last weekend I sat on the kitchen floor in our tiny HDB flat, chopping ginger for Sunday’s chicken rice, when Milo — that greedy tabby who thinks he owns the place — parked himself right between my knees. Eyes wide, tail flicking like he was conducting an orchestra. He knows the sound of the cleaver on the board means something good might drop. I gave him a tiny shred of plain steamed breast before I added the garlic and soy. He devoured it in one gulp and looked up like, “That’s it?” Classic Milo. That little moment reminded me how easy it is to share — and how quickly it can go wrong if I’m not careful.

@@ -13,7 +13,7 @@ const { categories, activeCategory } = Astro.props;
   {categories.map(category => (
 
       <a 
-        href={`/category/${category}/`} 
+      href={`/${category}/`}
         class:list={[{ active: category === activeCategory }]}>
         {formatCategory(category)}
       </a>

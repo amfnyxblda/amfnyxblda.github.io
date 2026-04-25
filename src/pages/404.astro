@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="404 — Page Not Found" description="This page does not exist.">
+  <div class="not-found">
+    <div class="container not-found__inner">
+      <span class="not-found__code">404</span>
+      <h1 class="not-found__title">Page not found</h1>
+      <p class="not-found__desc">
+        The page you're looking for has moved, been deleted, or never existed.
+        Perhaps it was always only a rumour.
+      </p>
+      <div class="not-found__actions">
+        <a href="/" class="btn btn--primary">Go home</a>
+    <a href="/" class="btn btn--outline">Browse articles</a>
+        <a href="/search" class="btn btn--outline">Search</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.not-found {
+  min-height: 60vh;
+  padding-top: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.not-found__inner {
+  padding: var(--space-3xl) 0;
+  text-align: center;
+}
+
+.not-found__code {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 15vw, 10rem);
+  font-weight: 700;
+  color: var(--color-border);
+  line-height: 1;
+  margin-bottom: var(--space-md);
+}
+
+.not-found__title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: var(--space-md);
+}
+
+.not-found__desc {
+  color: var(--color-ink-3);
+  font-size: 1.05rem;
+  max-width: 440px;
+  margin: 0 auto var(--space-xl);
+  font-style: italic;
+}
+
+.not-found__actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+</style>

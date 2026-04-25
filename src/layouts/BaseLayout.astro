@@ -1,109 +1,64 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description?: string;
+  ogImage?: string;
+  article?: boolean;
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+const {
+  title,
+  description = "Meridian — Thoughtful writing on technology, culture, food, travel, and the world we inhabit.",
+  ogImage = "/og-default.jpg",
+  article = false,
+} = Astro.props;
+
+const siteName = "Meridian";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://meridian.blog");
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="icon" type="image/png" href="/favicon.png" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<slot name="head" />
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-RVM35L3Z0L"></script>
-			<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
 
-			gtag('config', 'G-RVM35L3Z0L');
-		</script>
-	</head>
-	<body>
-		<Header />
-		<div class="container">
-			<slot /> <!-- Page content will be injected here -->
-		</div>
-		<Footer />
-		<style is:global>
-			:root {
-				--color-text: #222;
-				--color-bg: #f8f8f8;
-				--color-border: #ddd;
-			}
-			html {
-				background-color: var(--color-bg);
-				color: var(--color-text);
-			}
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-				line-height: 1.6;
-				margin: 0;
-			}
-			* {
-				box-sizing: border-box;
-				margin: 0;
-				padding: 0;
-				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			}
-			.container {
-				width: 90%;
-				max-width: 800px;
-				margin: 0 auto;
-				padding: 0;
-			}
-			h1 {
-				font-size: 2.5rem;
-				font-weight: 300;
-				line-height: 1.2;
-				letter-spacing: -0.02em;
-				margin-bottom: 10px;
-			}
-			.post-title {
-				font-size: 1.5rem;
-				font-weight: 600;
-				margin-top: 12px;
-				line-height: 1.3;
-				color: var(--primary-color);
-				transition: color 0.2s ease;
-			}
-			code {
-				font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-					DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-			}
-			a {
-				color: #0056b3;
-			}
-			h2{
-				margin-top: 2.14em;
-				margin-bottom: -0.46em;
-			}
-			p {
-				font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif;
-				font-size: 20px;
-				line-height: 32px;
-				margin-top: 1.8em;
-			}
+    <title>{title === siteName ? title : `${title} — ${siteName}`}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
 
-			blockquote {
-				border-left: 3px solid #242424;
-				padding-left: 20px;
-				margin-left: 0;
-				font-style: italic;
-				font-size: 21px;
-				color: #242424;
-			}
-		</style>
-	</body>
+    <!-- Open Graph -->
+    <meta property="og:type"        content={article ? "article" : "website"} />
+    <meta property="og:url"         content={canonicalURL} />
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta property="og:site_name"   content={siteName} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
+
+    <!-- Fonts preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+
+  <body>
+    <Header />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
 </html>

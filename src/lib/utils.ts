@@ -1,16 +1,27 @@
-/**
- * Formats a slug-like string (e.g., 'web-development') into a title-cased string 
- * (e.g., 'Web Development').
- * @param slug The input string to format.
- * @returns The formatted, title-cased string.
- */
+const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+  lifestyle: "exercise-and-fitness",
+};
+
+const CATEGORY_LABEL_OVERRIDES: Record<string, string> = {
+  "exercise-and-fitness": "Exercise & Fitness",
+  "nutrition-and-diet": "Nutrition & Diet",
+};
+
+export function canonicalizeCategorySlug(slug: string): string {
+  if (!slug) return "";
+  return CATEGORY_SLUG_ALIASES[slug] ?? slug;
+}
+
 export function formatCategory(slug: string): string {
-  if (!slug) return '';
-  
-  const words = slug.replaceAll('26', ' & ').split('-');
-  const capitalizedWords = words.map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  );
-  
-  return capitalizedWords.join(' ');
+  const canonical = canonicalizeCategorySlug(slug);
+  if (!canonical) return "";
+  if (CATEGORY_LABEL_OVERRIDES[canonical]) return CATEGORY_LABEL_OVERRIDES[canonical];
+
+  const words = canonical.split("-");
+  const capitalizedWords = words.map((word) => {
+    if (word.toLowerCase() === "and") return "&";
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  return capitalizedWords.join(" ");
 }

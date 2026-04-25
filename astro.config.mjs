@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import pagefind from "astro-pagefind";
 
 import sitemap from '@astrojs/sitemap';
 
@@ -15,5 +16,5 @@ export default defineConfig({
   site: 'https://amfnyxblda.github.io',
   base: '/', 
   outDir: 'dist',
-  integrations: [sitemap()],
+  integrations: [sitemap(), pagefind()],
 });

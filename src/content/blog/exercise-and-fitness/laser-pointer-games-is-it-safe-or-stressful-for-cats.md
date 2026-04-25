@@ -1,12 +1,13 @@
 ---
-title: 'Laser pointer games - is it safe or stressful for cats?'
-description: 'Cats love chasing laser dots, but experts warn of stress risks. Learn safe play tips to keep your cat healthy.'
-author: 'Anonymous'
-pubDate: '2025-01-17'
-updatedDate: '2025-01-17'
+title: "Laser pointer games - is it safe or stressful for cats?"
+description: "Cats love chasing laser dots, but experts warn of stress risks. Learn safe play tips to keep your cat healthy."
+pubDate: "2026-04-17"
+category: "Exercise & Fitness"
+author: "Anonymous"
+featured: false
+readingTime: 5
 heroImage: 'https://jagapet.com/images1/2.jpg'
 ---
-
 I still remember the exact moment I felt that tiny pang of guilt. It was a humid Tuesday evening in my HDB flat in Toa Payoh, the kind where the fan just pushes hot air around and everyone’s too tired to cook. My cat was already half-asleep on the sofa after a long day of ignoring me. I pulled out this cheap red laser pointer I’d grabbed from Mustafa Centre for five bucks—because, honestly, who has time for feather wands when you’re rushing home from the MRT at 8pm?
 
 One flick of the button and she exploded. Eyes huge, ears forward, that low crouch like a tiny tiger. She tore across the living room, skidded under the coffee table, leaped onto the balcony railing. For five glorious minutes she was alive in a way I rarely see in our shoebox-sized Singapore home. Then I switched it off. She froze, tail still twitching, staring at the wall like the dot had betrayed her. And just like that, the magic soured.

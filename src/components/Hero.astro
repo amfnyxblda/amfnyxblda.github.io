@@ -1,0 +1,189 @@
+---
+// Hero — clean white layout matching screenshot 1
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__inner">
+
+    <!-- Left: text -->
+    <div class="hero__text">
+      <h1 id="hero-title" class="hero__title">
+        Paw-sitive <strong>guides</strong> for taking care of your <strong>pet</strong>
+      </h1>
+
+      <p class="hero__subtitle">
+        Life is better with a little fur on your clothes and a lot of love in your house. Dive into our collection of hacks, reviews, and sanity-saving tips designed to make every day with your pet an adventure.
+      </p>
+
+    <a href="/#latest-articles" class="hero__cta-btn">
+        Read articles
+        <span class="hero__cta-arrow" aria-hidden="true">&#x2197;</span>
+      </a>
+    </div>
+
+    <!-- Right: hero image -->
+    <div class="hero__orb-wrap" aria-hidden="true">
+      <div class="hero__orb"></div>
+    </div>
+
+  </div>
+
+  <!-- Subtle column grid lines -->
+  <div class="hero__grid" aria-hidden="true">
+    {Array.from({ length: 5 }).map(() => <div class="hero__grid-line"></div>)}
+  </div>
+</section>
+
+<style>
+.hero {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 80px; /* header height */
+  background: #fff;
+}
+
+/* Grid lines */
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero__grid-line {
+  border-right: 1px solid rgba(0,0,0,0.04);
+}
+
+/* Inner two-column layout */
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  width: 100%;
+  max-width: var(--wide-width);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  gap: 2rem;
+  min-height: calc(100vh - 80px);
+}
+
+/* ── Left text ───────────────────────────────── */
+.hero__text {
+  padding: 4rem 0;
+  animation: heroFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.6rem, 4.5vw, 4.2rem);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: #111;
+  margin-bottom: 2rem;
+}
+
+.hero__title strong {
+  font-weight: 800;
+}
+
+.hero__subtitle {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #444;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.hero__cta-inline {
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.hero__cta-inline:hover { color: #111; }
+
+/* CTA button */
+.hero__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #111;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  padding: 0.85rem 1.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.hero__cta-btn:hover {
+  background: #333;
+  transform: translateY(-1px);
+}
+.hero__cta-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ── Right orb ───────────────────────────────── */
+.hero__orb-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  animation: orbReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s both;
+}
+
+@keyframes orbReveal {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.hero__orb {
+  width: clamp(280px, 42vw, 520px);
+  height: clamp(280px, 42vw, 520px);
+  border-radius: 16px;
+  background-image: url("/hero1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 820px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 3rem 1.5rem 2rem;
+    gap: 2.5rem;
+  }
+  .hero { min-height: auto; padding-top: 70px; }
+  .hero__orb-wrap { padding: 0; justify-content: center; }
+  .hero__orb {
+    width: clamp(220px, 70vw, 360px);
+    height: clamp(220px, 70vw, 360px);
+  }
+  .hero__text { padding: 0; }
+  .hero__title { font-size: clamp(2.2rem, 7vw, 3rem); }
+}
+
+@media (max-width: 480px) {
+  .hero__inner { padding: 2.5rem 1.25rem 1.5rem; }
+}
+</style>
+

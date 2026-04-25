@@ -1,26 +1,254 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+const navLinks = [
+  { href: "/",                    label: "Home",       num: "01" },
+  { href: "/",                    label: "Articles",   num: "02" },
+  { href: "/search",              label: "Search",     num: "03" },
+];
+
+const languageLinks = [
+  { code: "en", href: "/" },
+  { code: "fr", href: "/fr" },
+  { code: "de", href: "/de" },
+];
+
+const currentPath = Astro.url.pathname;
+const activeLang = languageLinks.find((lang) => {
+  if (lang.code === "en") {
+    return currentPath === "/" || (!currentPath.startsWith("/fr") && !currentPath.startsWith("/de"));
+  }
+  return currentPath === lang.href || currentPath.startsWith(`${lang.href}/`);
+})?.code ?? "en";
 ---
-<header>
-    <div class="container">
-        <div id="logo">{SITE_TITLE}</div>
-        <p class="tagline">{SITE_DESCRIPTION}</p>
-    </div>
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="Meridian Home">
+      <span class="logo-mark">J</span>agapet
+    </a>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="fullscreen-menu">
+      <span class="menu-btn__bar"></span>
+      <span class="menu-btn__bar"></span>
+    </button>
+  </div>
 </header>
+
+<div class="fs-menu" id="fullscreen-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <button class="fs-menu__close" id="menu-close" aria-label="Close menu">&#x2715;</button>
+  <nav class="fs-menu__nav" aria-label="Main navigation">
+    {navLinks.map((link) => (
+      <a href={link.href} class="fs-menu__link">
+        <span class="fs-menu__link-num">{link.num}</span>
+        <span class="fs-menu__link-label">{link.label}</span>
+      </a>
+    ))}
+  </nav>
+  <div class="fs-menu__lang">
+    {languageLinks.map((lang) => (
+      <a
+        href={lang.href}
+        class={`fs-menu__lang-link ${activeLang === lang.code ? "fs-menu__lang-link--active" : ""}`}
+      >
+        {lang.code}
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  const menuBtn  = document.getElementById("menu-btn");
+  const closeBtn = document.getElementById("menu-close");
+  const fsMenu   = document.getElementById("fullscreen-menu");
+  const header   = document.getElementById("site-header");
+
+  function openMenu() {
+    fsMenu?.classList.add("is-open");
+    menuBtn?.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+    document.querySelectorAll<HTMLElement>(".fs-menu__link").forEach((el, i) => {
+      el.style.transitionDelay = `${i * 55 + 60}ms`;
+    });
+  }
+
+  function closeMenu() {
+    fsMenu?.classList.remove("is-open");
+    menuBtn?.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    document.querySelectorAll<HTMLElement>(".fs-menu__link").forEach((el) => {
+      el.style.transitionDelay = "0ms";
+    });
+  }
+
+  menuBtn?.addEventListener("click", openMenu);
+  closeBtn?.addEventListener("click", closeMenu);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+
+  window.addEventListener("scroll", () => {
+    header?.classList.toggle("scrolled", window.scrollY > 10);
+  }, { passive: true });
+
+</script>
+
 <style>
-  header {
-    margin: 0 0 30px;
-    padding: 0;
-    background: white;
-    text-align:center;
-  }
-  #logo{
-    font-size: 42px;
-    font-weight: 500;
-  }
-  .tagline {
-    margin-top: -5px;
-    font-size: 1rem;
-    font-weight: 400;
-  }
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+.site-header.scrolled {
+  background: rgba(250,250,248,0.94);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 var(--color-border-light);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2.5rem;
+  max-width: var(--wide-width);
+  margin: 0 auto;
+}
+.logo {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  color: black;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-md);
+  transition: color var(--transition);
+}
+.logo:hover { color: var(--color-accent-2); }
+.logo .logo-mark { color: var(--color-accent-2); }
+
+/* Hamburger */
+.menu-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  background: none; border: none; padding: 0;
+}
+.menu-btn__bar {
+  display: block;
+  height: 1.5px;
+  background: var(--color-ink);
+  border-radius: 2px;
+  transition: width 0.2s ease;
+}
+.menu-btn__bar:first-child { width: 24px; }
+.menu-btn__bar:last-child  { width: 15px; }
+.menu-btn:hover .menu-btn__bar { width: 24px; }
+
+/* Fullscreen overlay */
+.fs-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #f7f7f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.fs-menu.is-open {
+  opacity: 1;
+  pointer-events: all;
+  visibility: visible;
+}
+
+/* Close */
+.fs-menu__close {
+  position: absolute;
+  top: 1.4rem; right: 2.5rem;
+  font-size: 1rem;
+  color: var(--color-ink);
+  background: none; border: none;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.2s;
+  padding: 0.5rem;
+  line-height: 1;
+}
+.fs-menu__close:hover { opacity: 1; }
+
+/* Nav */
+.fs-menu__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 3.5rem;
+}
+.fs-menu__link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: var(--color-ink);
+  padding: 0.05rem 0;
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.38s ease, transform 0.38s ease, color 0.18s ease;
+}
+.fs-menu.is-open .fs-menu__link {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fs-menu__link:hover { color: #888; }
+
+.fs-menu__link-num {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: #aaa;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+  margin-top: 0.7rem;
+}
+.fs-menu__link-label {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(3rem, 7.5vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+/* Lang */
+.fs-menu__lang {
+  display: flex;
+  gap: 1.75rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.38s ease 0.38s, transform 0.38s ease 0.38s;
+}
+.fs-menu.is-open .fs-menu__lang {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fs-menu__lang-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #bbb;
+  text-decoration: none;
+  transition: color 0.18s;
+  line-height: 1;
+}
+.fs-menu__lang-link--active { color: var(--color-ink); font-weight: 700; }
+.fs-menu__lang-link:hover   { color: var(--color-ink); }
+
+@media (max-width: 480px) {
+  .header-inner { padding: 1rem 1.25rem; }
+  .fs-menu__close { right: 1.25rem; top: 1rem; }
+  .fs-menu__link-label { font-size: clamp(2.2rem, 11vw, 3.5rem); }
+}
 </style>
