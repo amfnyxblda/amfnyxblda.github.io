@@ -1,0 +1,286 @@
+---
+interface Props {
+  title?: string;
+  intro?: string;
+  submitLabel?: string;
+  source?: string;
+  successMessage?: string;
+  toastPosition?: "top-left" | "top-middle" | "top-right" | "bottom-left" | "bottom-middle" | "bottom-right";
+}
+
+const {
+  title = "Leave a Message",
+  intro = "Share your thoughts with us.",
+  submitLabel = "Send message",
+  source = "website",
+  successMessage = "Success. Your message has been received.",
+  toastPosition = "top-middle",
+} = Astro.props;
+---
+
+<section class="message-widget">
+  <div class="message-widget__head">
+    <h2 class="message-widget__title">{title}</h2>
+    <p class="message-widget__intro">{intro}</p>
+  </div>
+
+  <form class="message-form" data-remote-message-form data-source={source} data-success-message={successMessage}>
+    <div class="message-form__grid">
+      <label class="message-form__field">
+        <span class="message-form__label">Name</span>
+        <input class="message-form__input" type="text" name="name" autocomplete="name" required />
+      </label>
+
+      <label class="message-form__field">
+        <span class="message-form__label">Email</span>
+        <input class="message-form__input" type="email" name="email" autocomplete="email" required />
+      </label>
+    </div>
+
+    <label class="message-form__field message-form__field--full">
+      <span class="message-form__label">Message</span>
+      <textarea class="message-form__textarea" name="message" rows="6" required></textarea>
+    </label>
+
+    <button class="message-form__submit" type="submit">{submitLabel}</button>
+  </form>
+
+  <div class={`message-toast message-toast--${toastPosition}`} role="status" aria-live="polite"></div>
+</section>
+
+<script is:inline>
+  const submitEndpoint = "https://techagi.alwaysdata.net/submit/dsjs9cg";
+
+  const showToast = (toastEl, text, isSuccess) => {
+    if (!toastEl) return;
+    toastEl.textContent = text;
+    toastEl.classList.remove("is-success", "is-error", "is-visible");
+    toastEl.classList.add(isSuccess ? "is-success" : "is-error", "is-visible");
+    window.setTimeout(() => {
+      toastEl.classList.remove("is-visible");
+    }, 3200);
+  };
+
+  const bindRemoteMessageForm = (form) => {
+    if (!form || form.dataset.bound === "true") return;
+    form.dataset.bound = "true";
+
+    const root = form.closest(".message-widget");
+    const toastEl = root?.querySelector(".message-toast");
+    const submitBtn = form.querySelector(".message-form__submit");
+    const defaultButtonText = submitBtn?.textContent || "Send";
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!submitBtn) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      const formData = new FormData(form);
+      formData.append("source", form.dataset.source || "website");
+      formData.append("page", window.location.pathname);
+
+      try {
+        const response = await fetch(submitEndpoint, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) throw new Error("Request failed");
+
+        form.reset();
+        showToast(
+          toastEl,
+          form.dataset.successMessage || "Success. Your message has been received.",
+          true
+        );
+      } catch (error) {
+        showToast(toastEl, "Error, there was an error with the submission.", false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = defaultButtonText;
+      }
+    });
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-remote-message-form]").forEach((form) => {
+      bindRemoteMessageForm(form);
+    });
+  });
+</script>
+
+<style>
+.message-widget {
+  margin-top: var(--space-2xl);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(200, 83, 58, 0.09), transparent 42%),
+    linear-gradient(180deg, #ffffff, #fbfaf8);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.05);
+  padding: clamp(1rem, 3vw, 2rem);
+  position: relative;
+}
+
+.message-widget__head {
+  margin-bottom: var(--space-lg);
+}
+
+.message-widget__title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.message-widget__intro {
+  margin: 0;
+  color: var(--color-ink-3);
+}
+
+.message-form__grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.message-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.message-form__field--full {
+  margin-top: var(--space-md);
+}
+
+.message-form__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+.message-form__input,
+.message-form__textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.96rem;
+  padding: 0.78rem 0.95rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.message-form__textarea {
+  resize: vertical;
+  min-height: 132px;
+}
+
+.message-form__input:focus,
+.message-form__textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(200, 83, 58, 0.12);
+}
+
+.message-form__submit {
+  margin-top: var(--space-lg);
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.82rem 1.35rem;
+  cursor: pointer;
+  transition: transform var(--transition), filter var(--transition), opacity var(--transition);
+}
+
+.message-form__submit:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.06);
+}
+
+.message-form__submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+
+.message-toast {
+  position: fixed;
+  --toast-x: 0;
+  --toast-y: 12px;
+  z-index: 500;
+  max-width: min(92vw, 360px);
+  border-radius: 12px;
+  padding: 0.75rem 0.95rem;
+  color: #fff;
+  font-size: 0.88rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translate(var(--toast-x), var(--toast-y));
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.message-toast--top-left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.message-toast--top-middle {
+  top: 1rem;
+  left: 50%;
+  --toast-x: -50%;
+  --toast-y: -12px;
+}
+
+.message-toast--top-right {
+  top: 1rem;
+  right: 1rem;
+}
+
+.message-toast--bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.message-toast--bottom-middle {
+  bottom: 1rem;
+  left: 50%;
+  --toast-x: -50%;
+  --toast-y: 12px;
+}
+
+.message-toast--bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.message-toast.is-visible {
+  opacity: 1;
+  transform: translate(var(--toast-x), 0);
+}
+
+.message-toast.is-success {
+  background: #2f7d4d;
+}
+
+.message-toast.is-error {
+  background: #a13f3f;
+}
+
+@media (max-width: 760px) {
+  .message-form__grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

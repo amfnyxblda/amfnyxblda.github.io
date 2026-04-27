@@ -3,12 +3,13 @@ const navLinks = [
   { href: "/",                    label: "Home",       num: "01" },
   { href: "/",                    label: "Articles",   num: "02" },
   { href: "/search",              label: "Search",     num: "03" },
+  { href: "/contact",             label: "Contact",    num: "04" },
 ];
 
 const languageLinks = [
-  { code: "en", href: "/" },
-  { code: "fr", href: "/fr" },
-  { code: "de", href: "/de" },
+  { code: "English", href: "/" },
+  { code: "Malay", href: "/my" },
+  { code: "Chinese", href: "/cn" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -26,6 +27,7 @@ const activeLang = languageLinks.find((lang) => {
       <span class="logo-mark">J</span>agapet
     </a>
     <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="fullscreen-menu">
+      <span class="menu-btn__bar"></span>
       <span class="menu-btn__bar"></span>
       <span class="menu-btn__bar"></span>
     </button>
@@ -78,13 +80,18 @@ const activeLang = languageLinks.find((lang) => {
     });
   }
 
+  function syncHeaderState() {
+    header?.classList.toggle("scrolled", window.scrollY > 10);
+  }
+
   menuBtn?.addEventListener("click", openMenu);
   closeBtn?.addEventListener("click", closeMenu);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
 
-  window.addEventListener("scroll", () => {
-    header?.classList.toggle("scrolled", window.scrollY > 10);
-  }, { passive: true });
+  syncHeaderState();
+  window.addEventListener("load", syncHeaderState);
+  window.addEventListener("pageshow", syncHeaderState);
+  window.addEventListener("scroll", syncHeaderState, { passive: true });
 
 </script>
 
@@ -92,7 +99,7 @@ const activeLang = languageLinks.find((lang) => {
 .site-header {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 200;
+  z-index: 1000;
   transition: background var(--transition), box-shadow var(--transition);
 }
 .site-header.scrolled {
@@ -140,7 +147,7 @@ const activeLang = languageLinks.find((lang) => {
   border-radius: 2px;
   transition: width 0.2s ease;
 }
-.menu-btn__bar:first-child { width: 24px; }
+.menu-btn__bar { width: 24px; }
 .menu-btn__bar:last-child  { width: 15px; }
 .menu-btn:hover .menu-btn__bar { width: 24px; }
 
@@ -169,7 +176,8 @@ const activeLang = languageLinks.find((lang) => {
 .fs-menu__close {
   position: absolute;
   top: 1.4rem; right: 2.5rem;
-  font-size: 1rem;
+  font-size: 2rem;
+  font-weight: 500;
   color: var(--color-ink);
   background: none; border: none;
   cursor: pointer;

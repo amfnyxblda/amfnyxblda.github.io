@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 /* import { GITHUB_URL } from '../../consts'; */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/PostCard.astro";
+import RemoteMessageForm from "../../components/RemoteMessageForm.astro";
 import { canonicalizeCategorySlug, formatCategory } from "../../lib/utils";
 
 export async function getStaticPaths() {
@@ -137,6 +138,13 @@ const updatedFormatted = updatedDate
         More in {categoryLabel} →
       </a>
     </div>
+    <RemoteMessageForm
+      title="Leave a Comment"
+      intro="Drop your feedback, questions, or ideas. We read every comment."
+      submitLabel="Post Comment"
+      source="article-comment"
+      successMessage="Success. Your comment has been received."
+    />
   </div>
 
   <!-- Related posts -->
