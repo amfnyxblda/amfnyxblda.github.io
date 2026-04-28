@@ -5,12 +5,31 @@ import { canonicalizeCategorySlug, formatCategory } from "../lib/utils";
 
 const posts = await getCollection("blog");
 const categories = [...new Set(posts.map((post) => canonicalizeCategorySlug(post.id.split("/")[0])))].sort();
+const baseUrl = Astro.site?.toString() ?? Astro.url.origin;
+const pageUrl = Astro.url.href;
+const searchSchema = {
+  "@context": "https://schema.org",
+  "@type": "SearchResultsPage",
+  name: "Search - Jagapet",
+  description: "Search all Jagapet articles.",
+  url: pageUrl,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Jagapet",
+    url: baseUrl,
+  },
+  about: {
+    "@type": "Thing",
+    name: "Pet Care Articles",
+  },
+};
 ---
 
 <BaseLayout
   title="Search"
   description="Search all articles on Meridian - find essays on technology, exercise & fitness, food, travel, environment, and health."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(searchSchema)} />
   <div class="search-header">
     <div class="container">
       <span class="page-kicker">Find anything</span>

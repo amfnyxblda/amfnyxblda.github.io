@@ -64,6 +64,30 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 const updatedFormatted = updatedDate
   ? updatedDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
   : null;
+const baseUrl = Astro.site?.toString() ?? Astro.url.origin;
+const pageUrl = Astro.url.href;
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  url: pageUrl,
+  mainEntityOfPage: pageUrl,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  articleSection: categoryLabel,
+  keywords: tags,
+  author: {
+    "@type": "Person",
+    name: author,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Jagapet",
+    url: baseUrl,
+  },
+  ...(heroImage ? { image: [heroImage] } : {}),
+};
 ---
 <BaseLayout
   title={title}
@@ -71,6 +95,7 @@ const updatedFormatted = updatedDate
   ogImage={heroImage}
   article={true}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
 
   <div class="post-hero-split">
     {heroImage && (

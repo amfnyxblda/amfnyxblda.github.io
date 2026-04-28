@@ -33,9 +33,38 @@ const categoryLabel = formatCategory(category);
 const currentPage = page.currentPage;
 const totalPages = page.lastPage; // In the paginate helper, 'lastPage' is used for total pages
 const pagePosts = page.data;
+const baseUrl = Astro.site?.toString() ?? Astro.url.origin;
+const pageUrl = Astro.url.href;
 const postPath = (postId: string) => {
   const [rawCategory, slug] = postId.split("/");
   return `/${canonicalizeCategorySlug(rawCategory)}/${slug}`;
+};
+const categoryPaginationSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `${categoryLabel} Articles - Page ${currentPage}`,
+  description: `Page ${currentPage} of ${totalPages} for ${categoryLabel} articles on Jagapet.`,
+  url: pageUrl,
+  isPartOf: {
+    "@type": "CollectionPage",
+    name: `${categoryLabel} Articles`,
+    url: new URL(`/${category}`, baseUrl).toString(),
+  },
+  about: {
+    "@type": "Thing",
+    name: categoryLabel,
+  },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    numberOfItems: pagePosts.length,
+    itemListElement: pagePosts.map((post, index) => ({
+      "@type": "ListItem",
+      position: (currentPage - 1) * CATEGORY_POSTS_PER_PAGE + index + 1,
+      url: new URL(postPath(post.id), baseUrl).toString(),
+      name: post.data.title,
+    })),
+  },
 };
 
 // Fetch metadata for sidebar (standard logic)
@@ -67,6 +96,7 @@ const categoryDescriptions: { [key: string]: string } = {
   title={`Articles — Page ${currentPage}`}
   description={`Page ${currentPage} of ${totalPages} — all articles on Meridian.`}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(categoryPaginationSchema)} />
 
   <div class="blog-page">
   <!-- Category header -->

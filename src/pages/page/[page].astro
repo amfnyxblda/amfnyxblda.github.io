@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from "../../components/Pagination.astro";
-import JSONLD from '../../components/JSONLD.astro';
 import { canonicalizeCategorySlug, formatCategory } from "../../lib/utils";
 
 export const POSTS_PER_PAGE = 3;
@@ -38,18 +37,30 @@ const postPath = (postId: string) => {
 
 const { currentPage, totalPages, pagePosts, totalPosts } = Astro.props;
 
-const Schema = {
+const baseUrl = Astro.site?.toString() ?? Astro.url.origin;
+const pageUrl = Astro.url.href;
+const paginationSchema = {
   "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": `Blog Posts - Page ${currentPage}`,
-  "numberOfItems": totalPages, // Total posts in the collection
-  "itemListElement": pagePosts.map((post, index) => ({
-    "@type": "ListItem",
-    // Position should be relative to the current page (e.g., 11-20 on Page 2)
-    "position": (currentPage - 1) * totalPosts + (index + 1),
-    "url": new URL(postPath(post.id), Astro.site).toString(),
-    "name": post.data.title
-  }))
+  "@type": "CollectionPage",
+  name: `Jagapet Articles - Page ${currentPage}`,
+  description: `Page ${currentPage} of ${totalPages} for all Jagapet articles.`,
+  url: pageUrl,
+  isPartOf: {
+    "@type": "CollectionPage",
+    name: "Jagapet Articles",
+    url: new URL("/page/1", baseUrl).toString(),
+  },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    numberOfItems: pagePosts.length,
+    itemListElement: pagePosts.map((post, index) => ({
+      "@type": "ListItem",
+      position: (currentPage - 1) * POSTS_PER_PAGE + index + 1,
+      url: new URL(postPath(post.id), baseUrl).toString(),
+      name: post.data.title,
+    })),
+  },
 };
 
 function timeAgo(date: Date): string {
@@ -66,6 +77,7 @@ function timeAgo(date: Date): string {
   title={`Articles — Page ${currentPage}`}
   description={`Page ${currentPage} of ${totalPages} — all articles on Meridian.`}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(paginationSchema)} />
   <div class="blog-page">
 
     <!-- Category header -->

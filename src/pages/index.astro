@@ -26,14 +26,37 @@ const sorted = allPosts.sort(
 const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
 const currentPage = 1;
 const pagePosts = sorted.slice(0, POSTS_PER_PAGE);
+const baseUrl = Astro.site?.toString() ?? Astro.url.origin;
+const pageUrl = Astro.url.href;
 
-const Schema = {
+const indexCollectionSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Jagapet",
-  "description": "Paw-sitive guides for taking care of your pet.",
-  "url": Astro.url.href
-}
+  name: "Jagapet Blog",
+  description: "Paw-sitive guides for taking care of your pet.",
+  url: pageUrl,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Jagapet",
+    url: baseUrl,
+  },
+  about: {
+    "@type": "DefinedTerm",
+    "name": "Pet Care",
+    "sameAs": "https://en.wikipedia.org/wiki/Pet_care" // This removes all ambiguity
+  },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    numberOfItems: pagePosts.length,
+    itemListElement: pagePosts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: new URL(postPath(post.id), baseUrl).toString(),
+      name: post.data.title,
+    })),
+  },
+};
 
 function timeAgo(date: Date): string {
   const diff = Date.now() - date.getTime();
@@ -50,6 +73,7 @@ function timeAgo(date: Date): string {
   description="Paw-sitive guides for taking care of your pet."
 >
   <!-- ── Hero ──────────────────────────────── -->
+  <script type="application/ld+json" set:html={JSON.stringify(indexCollectionSchema)} />
   <Hero />
 
   <div class="blog-page">
@@ -333,6 +357,4 @@ function timeAgo(date: Date): string {
   scroll-margin-top: 110px;
 }
 </style>
-
-
 
