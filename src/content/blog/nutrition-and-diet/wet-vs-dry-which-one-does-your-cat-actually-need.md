@@ -2,7 +2,7 @@
 title: "Wet vs. Dry: Which One Does Your Cat Actually Need?"
 description: "A straightforward look at the pros and cons of wet and dry cat food to help you decide what’s actually best for your cat’s health."
 pubDate: "2025-04-19"
-author: "Anonymous"
+author: "Puteri Nabila"
 featured: false
 readingTime: 5
 heroImage: "https://jagapet.com/images1/6.jpg"

@@ -2,7 +2,7 @@
 title: "Safe Human Foods for Cats (and What to Avoid)e"
 description: "A comprehensive guide to safe and toxic human foods for cats, featuring 2026 feline nutrition trends and expert advice."
 pubDate: "2025-04-16"
-author: "Anonymous"
+author: "Puteri Nabila"
 featured: false
 readingTime: 5
 heroImage: "https://jagapet.com/images1/1.jpg"

@@ -3,7 +3,7 @@ title: "The Lazy Owner’s Guide to Feline Exercise: Low-Effort Ways to Keep Cat
 description: "A realistic guide to keeping your cat moving without you having to leave the couch."
 pubDate: "2026-04-21"
 category: "Exercise & Fitness"
-author: "Anonymous"
+author: "Puteri Nabila"
 featured: false
 readingTime: 5
 heroImage: 'https://jagapet.com/images1/5.jpg'

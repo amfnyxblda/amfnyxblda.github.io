@@ -3,7 +3,7 @@ title: "Small Space, Big Energy: Exercising Your Cat in an Apartment"
 description: "In tight Asian apartments, a few clever moves can turn your cat from a couch potato into a zoomie cat—without losing your sanity or your security deposit."
 pubDate: "2026-04-24"
 category: "Exercise & Fitness"
-author: "Anonymous"
+author: "Siti binti Ahmad"
 featured: false
 readingTime: 5
 heroImage: 'https://jagapet.com/images1/4.jpg'
@@ -33,7 +33,7 @@ Cat trees are great if you have the budget and the corner for one, but they can 
 
 In Singapore especially, with our love for neatness, these vertical additions double as decor if you pick neutral tones. My neighbour has a whole wall of staggered perches that look almost intentional, like modern art for cats. Her Persian mix spends hours up there, tail flicking, watching the mynah birds outside.
 
-**Pro tip:** Always check your lease or MCST rules, but most places are fine with wall-mounted stuff as long as you don’t drill like you’re renovating for a family of ten. And secure everything. High-rise syndrome is real here—cats leaping after a bird or a butterfly and forgetting they’re on the 18th floor. Window mesh or sturdy screens aren’t optional if your cat is the adventurous type.
+**Pro tip:** Always check your lease or property rules, but most places are fine with wall-mounted stuff as long as you don’t drill like you’re renovating for a family of ten. And secure everything. High-rise syndrome is real here—cats leaping after a bird or a butterfly and forgetting they’re on the 18th floor. Window mesh or sturdy screens aren’t optional if your cat is the adventurous type.
 
 ## Playtime That Actually Wears Them Out
 

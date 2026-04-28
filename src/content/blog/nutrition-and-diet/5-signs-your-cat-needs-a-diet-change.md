@@ -2,7 +2,7 @@
 title: "5 Signs Your Cat Needs a Diet Change"
 description: "Five subtle signs—like dull coat, weight changes, tummy troubles, low energy, and picky eating—suggest your indoor cat in Asia's humid climate may need a thoughtful diet switch to feel brighter and healthier again."
 pubDate: "2025-04-27"
-author: "Anonymous"
+author: "Puteri Nabila"
 featured: false
 readingTime: 5
 heroImage: "https://jagapet.com/images1/3.jpg"
