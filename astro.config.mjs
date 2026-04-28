@@ -13,8 +13,8 @@ export default defineConfig({
       // allowedHosts: true,
       },
   },
-  site: 'https://amfnyxblda.github.io',
-  base: '/', 
+  site: 'https://jagapet.com',
+  //base: '/', 
   outDir: 'dist',
   integrations: [sitemap(), pagefind()],
 });
