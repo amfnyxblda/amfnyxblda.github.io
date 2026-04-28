@@ -93,8 +93,12 @@ const categoryDescriptions: { [key: string]: string } = {
 
 ---
 <BaseLayout
-  title={`Articles — Page ${currentPage}`}
-  description={`Page ${currentPage} of ${totalPages} — all articles on Meridian.`}
+  title={currentPage === 1 ? categoryLabel : `${categoryLabel} - Page ${currentPage}`}
+  description={
+    currentPage === 1
+      ? `Browse ${categoryLabel} articles on Jagapet.`
+      : `Page ${currentPage} of ${totalPages} for ${categoryLabel} articles on Jagapet.`
+  }
 >
   <script type="application/ld+json" set:html={JSON.stringify(categoryPaginationSchema)} />
 

@@ -12,13 +12,15 @@ interface Props {
 
 const {
   title,
-  description = "Meridian — Thoughtful writing on technology, culture, food, travel, and the world we inhabit.",
+  description = "Jagapet - paw-sitive guides for taking care of your pet.",
   ogImage = "/og-default.jpg",
   article = false,
 } = Astro.props;
 
-const siteName = "Meridian";
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://meridian.blog");
+const siteName = "Jagapet";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://jagapet.blog");
+const normalizedTitle = title?.trim() || "Home";
+const documentTitle = `${normalizedTitle} | ${siteName}`;
 ---
 
 <!DOCTYPE html>
@@ -29,38 +31,38 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://meridian
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
 
-    <title>{title === siteName ? title : `${title}`}</title>
+    <title>{documentTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
-    <meta property="og:type"        content={article ? "article" : "website"} />
-    <meta property="og:url"         content={canonicalURL} />
-    <meta property="og:title"       content={title} />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image"       content={ogImage} />
-    <meta property="og:site_name"   content={siteName} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={siteName} />
 
     <!-- Twitter -->
-    <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={documentTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image"       content={ogImage} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Fonts preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVM35L3Z0L"></script>
-			<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
 
-			gtag('config', 'G-RVM35L3Z0L');
-		</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVM35L3Z0L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-RVM35L3Z0L');
+    </script>
   </head>
 
   <body>
