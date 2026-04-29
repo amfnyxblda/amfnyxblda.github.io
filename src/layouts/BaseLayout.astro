@@ -13,12 +13,12 @@ interface Props {
 const {
   title,
   description = "Jagapet - paw-sitive guides for taking care of your pet.",
-  ogImage = "/og-default.jpg",
+  ogImage = "/og-image.jpg",
   article = false,
 } = Astro.props;
 
 const siteName = "Jagapet";
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://jagapet.blog");
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://jagapet.com");
 const normalizedTitle = title?.trim() || "Home";
 const documentTitle = `${normalizedTitle} | ${siteName}`;
 ---
@@ -29,7 +29,7 @@ const documentTitle = `${normalizedTitle} | ${siteName}`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="noindex, follow">
 
     <title>{documentTitle}</title>
     <meta name="description" content={description} />
