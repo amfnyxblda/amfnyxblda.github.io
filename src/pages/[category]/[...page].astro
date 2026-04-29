@@ -2,8 +2,9 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from "../../components/Pagination.astro";
-import { CATEGORY_POSTS_PER_PAGE } from '../../consts';
 import { canonicalizeCategorySlug, formatCategory } from "../../lib/utils";
+
+export const CATEGORY_POSTS_PER_PAG = 3;
 
 export async function getStaticPaths({ paginate }) {
   const allPosts = await getCollection('blog');
