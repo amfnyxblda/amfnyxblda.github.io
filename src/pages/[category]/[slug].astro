@@ -127,15 +127,18 @@ const articleSchema = {
       <p class="post-hero-split__desc">{description}</p>
 
       <div class="post-hero-split__author">
-        <div class="author-avatar" aria-hidden="true">
-          {author.charAt(0)}
+        <div class="post-author-block">
+          <div class="author-avatar" aria-hidden="true">
+            {author.charAt(0)}
+          </div>
+          <div>
+            <span class="author-name author-name--dark">{author}</span>
+            {updatedFormatted && (
+              <span class="post-hero-split__updated">Updated {updatedFormatted}</span>
+            )}
+          </div>
         </div>
-        <div>
-          <span class="author-name author-name--dark">{author}</span>
-          {updatedFormatted && (
-            <span class="post-hero-split__updated">Updated {updatedFormatted}</span>
-          )}
-        </div>
+        <button class="share-btn" type="button" data-share-url={Astro.url.href} aria-label="Share this article"><svg class="share-btn__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"></line></svg><span>Share</span></button>
       </div>
     </div>
   </div>
@@ -156,11 +159,25 @@ const articleSchema = {
       </div>
     )}
  -->
+    <div class="post-footer-author">
+      <div class="post-author-block">
+        <div class="author-avatar" aria-hidden="true">
+          {author.charAt(0)}
+        </div>
+        <div>
+          <span class="author-name author-name--dark">{author}</span>
+          {updatedFormatted && (
+            <span class="post-hero-split__updated">Updated {updatedFormatted}</span>
+          )}
+        </div>
+      </div>
+      <button class="share-btn" type="button" data-share-url={Astro.url.href} aria-label="Share this article"><svg class="share-btn__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"></line></svg><span>Share</span></button>
+    </div>
     <!-- Share / nav row -->
     <div class="post-nav">
-      <a href="/" class="post-nav__back">← All articles</a>
+      <a href="/" class="post-nav__back">⟵ All articles</a>
       <a href={`/${category}`} class="post-nav__category">
-        More in {categoryLabel} →
+        More in {categoryLabel} ⟶
       </a>
     </div>
     <RemoteMessageForm
@@ -196,6 +213,38 @@ const articleSchema = {
   )}
 </BaseLayout>
 
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".share-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const shareUrl = btn.getAttribute("data-share-url") || window.location.href;
+        const shareTitle = document.title;
+
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: shareTitle, url: shareUrl });
+            return;
+          } catch (_error) {
+            return;
+          }
+        }
+
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          const label = btn.querySelector("span");
+          const previous = label?.textContent || "Share";
+          if (label) label.textContent = "Link copied";
+          window.setTimeout(() => {
+            if (label) label.textContent = previous;
+          }, 1800);
+        } catch (_error) {
+          window.open(shareUrl, "_blank", "noopener,noreferrer");
+        }
+      });
+    });
+  });
+</script>
+
 <style>
 /* Split hero alternative (image and content separated) */
 .post-hero-split {
@@ -212,7 +261,6 @@ const articleSchema = {
   height: min(62vh, 680px);
   object-fit: contain;
   object-position: center;
-  background: var(--color-surface);
 }
 
 .post-hero-split__content {
@@ -254,6 +302,13 @@ const articleSchema = {
 }
 
 .post-hero-split__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  justify-content: space-between;
+}
+
+.post-author-block {
   display: flex;
   align-items: center;
   gap: var(--space-md);
@@ -394,7 +449,7 @@ const articleSchema = {
 
 /* ── Post body ───────────────────────────────── */
 .post-body {
-  padding-top: var(--space-3xl);
+  padding-top: var(--space-3lg);
   padding-bottom: var(--space-2xl);
 }
 
@@ -422,7 +477,7 @@ const articleSchema = {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: var(--space-xl);
+  margin-top: var(--space-lg);
   padding-top: var(--space-lg);
   border-top: 1px solid var(--color-border);
   gap: var(--space-md);
@@ -439,6 +494,45 @@ const articleSchema = {
 
 .post-nav__back:hover,
 .post-nav__category:hover { color: var(--color-ink); }
+
+.share-btn {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  letter-spacing: 0.07em;
+  color: var(--color-accent);
+  transition: color var(--transition);
+}
+
+.share-btn:hover {
+  color: var(--color-ink);
+}
+
+.share-btn__icon {
+  flex-shrink: 0;
+}
+.share-btn:hover {
+  color: var(--color-ink);
+}
+
+.share-btn__icon {
+  flex-shrink: 0;
+}
+
+.post-footer-author {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+}
 
 /* ── Related posts ───────────────────────────── */
 .related-section {
@@ -458,3 +552,5 @@ const articleSchema = {
   gap: var(--space-lg);
 }
 </style>
+
+
