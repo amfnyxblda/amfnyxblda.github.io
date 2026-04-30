@@ -26,10 +26,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     // 2. Check if the path starts with the incorrect casing
     // We use a regex with the 'i' flag to find it, or a simple startsWith
-    if (currentPath.startsWith('/Melayu')) {
+    if (currentPath.startsWith('/melayu')) {
         
         // 3. Replace only the specific segment and keep the rest of the URL
-        var newPath = currentPath.replace(/^\/Melayu/, '/melayu');
+        var newPath = currentPath.replace(/^\/melayu/, '/Melayu');
         
         // 4. Redirect the user
         window.location.replace(newPath);
