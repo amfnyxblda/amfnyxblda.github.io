@@ -20,6 +20,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   </div>
 </BaseLayout>
 
+<script is:inline>
+    // 1. Get the current path (e.g., /Melayu/index.html)
+    var currentPath = window.location.pathname;
+
+    // 2. Check if the path starts with the incorrect casing
+    // We use a regex with the 'i' flag to find it, or a simple startsWith
+    if (currentPath.startsWith('/Melayu')) {
+        
+        // 3. Replace only the specific segment and keep the rest of the URL
+        var newPath = currentPath.replace(/^\/Melayu/, '/melayu');
+        
+        // 4. Redirect the user
+        window.location.replace(newPath);
+    }
+</script>
 <style>
 .not-found {
   min-height: 60vh;
